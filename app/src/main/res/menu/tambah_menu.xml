@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/tambah"
+        android:icon="@android:drawable/ic_input_add"
+        android:iconTint="@color/white"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/save"
+        android:icon="@android:drawable/ic_menu_save"
+        android:iconTint="#FFFFFF"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/back"
+        android:title="Back" />
+    <item
+        android:id="@+id/logout"
+        android:title="Logout" />
+
+</menu>
