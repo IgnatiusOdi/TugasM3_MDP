@@ -20,7 +20,6 @@ class LoginActivity : AppCompatActivity() {
     lateinit var btToRegister: Button
 
     var listUser: ArrayList<User> = ArrayList()
-    var indexUser: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,35 +32,36 @@ class LoginActivity : AppCompatActivity() {
         btLogin = findViewById(R.id.btLogin)
         btToRegister = findViewById(R.id.btToRegister)
 
-        val goToPengirim = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                res: ActivityResult ->
-            if (res.resultCode == RESULT_OK) {
-                val data = res.data
-                if (data != null) {
-
-                }
-            }
-        }
+        listUser.add(User("a", "a", "a", "12345678"))
+        etUsername.setText("a")
+        etPassword.setText("a")
+        rbKurir.isChecked = true
 
         val goToKurir = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 res: ActivityResult ->
             if (res.resultCode == RESULT_OK) {
                 val data = res.data
                 if (data != null) {
-
+                    val updatedUser = data.getParcelableExtra<User>("user")
+                    for (user in listUser) {
+                        if (user.username == updatedUser!!.username) {
+                            listUser[listUser.indexOf(user)] = updatedUser
+                            break
+                        }
+                    }
                 }
             }
         }
 
         btLogin.setOnClickListener {
-            indexUser = loginCheck()
+            val indexUser = loginCheck()
             if (indexUser != -1) {
-                if (rbPengirim.isSelected) {
+                if (rbPengirim.isChecked) {
                     // PENGIRIM
                     val intent = Intent(this, PengirimActivity::class.java)
                     intent.putExtra("user", listUser[indexUser])
-                    goToPengirim.launch(intent)
-                } else if (rbKurir.isSelected) {
+                    startActivity(intent)
+                } else if (rbKurir.isChecked) {
                     // KURIR
                     val intent = Intent(this, KurirActivity::class.java)
                     intent.putExtra("user", listUser[indexUser])
@@ -88,7 +88,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginCheck(): Int {
-        if (etUsername.text.isBlank() || etPassword.text.isBlank()) {
+        if (etUsername.text.isBlank() || etPassword.text.isBlank() || (!rbPengirim.isChecked && !rbKurir.isChecked)) {
             // FIELD KOSONG
             Toast.makeText(this, "Field tidak boleh kosong!", Toast.LENGTH_SHORT).show()
         } else {

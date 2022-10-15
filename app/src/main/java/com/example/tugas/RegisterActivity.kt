@@ -35,7 +35,7 @@ class RegisterActivity : AppCompatActivity() {
 
         btRegister.setOnClickListener {
             if (registerCheck()) {
-                val user: User = User(etName.text.toString(), etUsername.text.toString(), etPassword.text.toString(), etNomorTelepon.text.toString())
+                val user = User(etName.text.toString(), etUsername.text.toString(), etPassword.text.toString(), etNomorTelepon.text.toString())
                 listUser.add(user)
                 Toast.makeText(this, "Berhasil register!", Toast.LENGTH_SHORT).show()
                 etName.setText("")

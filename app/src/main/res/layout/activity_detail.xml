@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="40dp"
+    android:orientation="vertical"
+    tools:context=".DetailActivity">
+
+    <TextView
+        android:id="@+id/tvKodeResi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Kode Resi : -" />
+
+    <TextView
+        android:id="@+id/tvPenerimaDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Penerima : -" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Keterangan :" />
+
+    <TextView
+        android:id="@+id/tvKeteranganDetail"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#40000000"
+        android:text="-" />
+
+    <TextView
+        android:id="@+id/tvBeratDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Berat : -" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Alamat Pengirim :" />
+
+    <TextView
+        android:id="@+id/tvAlamatPengirimDetail"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#40000000"
+        android:text="-" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Alamat Tujuan :" />
+
+    <TextView
+        android:id="@+id/tvAlamatTujuanDetail"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#40000000"
+        android:text="-" />
+
+    <TextView
+        android:id="@+id/tvNomorHPDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nomor HP : -" />
+
+    <TextView
+        android:id="@+id/tvStatusDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Status : -" />
+
+</LinearLayout>

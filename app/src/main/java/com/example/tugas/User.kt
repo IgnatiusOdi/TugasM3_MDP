@@ -9,4 +9,8 @@ class User(
     val name: String,
     val password: String,
     val nomortelepon: String,
+    var dikirim: Int = 0,
+    var terkirim: Int = 0,
+    var pengiriman: ArrayList<String> = ArrayList(),
+    var penolakan: ArrayList<String> = ArrayList(),
 ):Parcelable {}
