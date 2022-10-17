@@ -46,21 +46,6 @@ class KurirActivity : AppCompatActivity() {
 
         tvNameKurir.text = "Hi, ${user.name} !"
 
-        for (kirim in user.pengiriman) {
-            for (listkirim in Pengiriman.listPengiriman) {
-                if (kirim == listkirim.nomorResi) {
-                    if (listkirim.status == 1) {
-                        var jumlah = tvProses.text.toString().toInt()
-                        tvProses.text = "${++jumlah}"
-                    } else if (listkirim.status == 2) {
-                        var jumlah = tvTerkirim.text.toString().toInt()
-                        tvTerkirim.text = "${++jumlah}"
-                    }
-                    break
-                }
-            }
-        }
-
         refreshPage()
         registerForContextMenu(tvSlot1)
         registerForContextMenu(tvSlot2)

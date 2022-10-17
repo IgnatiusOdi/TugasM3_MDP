@@ -203,6 +203,7 @@ class SearchActivity : AppCompatActivity() {
                 // UPDATE LIST PENGIRIMAN
                 updateListPengiriman(nomorResi)
                 updatePengirim()
+                updateKurir()
 
                 //UPDATE DATA USER
                 User.listUser[indexUser] = user

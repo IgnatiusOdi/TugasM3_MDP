@@ -57,20 +57,6 @@ class PengirimActivity : AppCompatActivity() {
         tvTotal.text = "${user.dikirim + user.terkirim}"
         tvDikirim.text = "${user.dikirim}"
         tvTerkirim.text = "${user.terkirim}"
-        for (kirim in user.pengiriman) {
-            for (listkirim in Pengiriman.listPengiriman) {
-                if (kirim == listkirim.nomorResi) {
-                    if (listkirim.status == 1) {
-                        var jumlah = tvDikirim.text.toString().toInt()
-                        tvDikirim.text = "${++jumlah}"
-                    } else if (listkirim.status == 2) {
-                        var jumlah = tvTerkirim.text.toString().toInt()
-                        tvTerkirim.text = "${++jumlah}"
-                    }
-                    break
-                }
-            }
-        }
 
         goToPengirimanBaru = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             res: ActivityResult ->
