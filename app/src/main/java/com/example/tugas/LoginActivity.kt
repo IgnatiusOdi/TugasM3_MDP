@@ -19,7 +19,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var btLogin: Button
     lateinit var btToRegister: Button
 
-    var listUser: ArrayList<User> = ArrayList()
+    private var indexUser = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,58 +32,31 @@ class LoginActivity : AppCompatActivity() {
         btLogin = findViewById(R.id.btLogin)
         btToRegister = findViewById(R.id.btToRegister)
 
-        listUser.add(User("a", "a", "a", "12345678"))
+        User.listUser.add(User("a", "a", "a", "12345678"))
         etUsername.setText("a")
         etPassword.setText("a")
         rbKurir.isChecked = true
 
-        val goToKurir = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                res: ActivityResult ->
-            if (res.resultCode == RESULT_OK) {
-                val data = res.data
-                if (data != null) {
-                    val updatedUser = data.getParcelableExtra<User>("user")
-                    for (user in listUser) {
-                        if (user.username == updatedUser!!.username) {
-                            listUser[listUser.indexOf(user)] = updatedUser
-                            break
-                        }
-                    }
-                }
-            }
-        }
-
         btLogin.setOnClickListener {
-            val indexUser = loginCheck()
+            indexUser = loginCheck()
             if (indexUser != -1) {
                 if (rbPengirim.isChecked) {
                     // PENGIRIM
                     val intent = Intent(this, PengirimActivity::class.java)
-                    intent.putExtra("user", listUser[indexUser])
+                    intent.putExtra("indexUser", indexUser)
                     startActivity(intent)
                 } else if (rbKurir.isChecked) {
                     // KURIR
                     val intent = Intent(this, KurirActivity::class.java)
-                    intent.putExtra("user", listUser[indexUser])
-                    goToKurir.launch(intent)
-                }
-            }
-        }
-
-        val goToRegister = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            res: ActivityResult ->
-            if (res.resultCode == RESULT_OK) {
-                val data = res.data
-                if (data != null) {
-                    listUser = data.getParcelableArrayListExtra("listUser")!!
+                    intent.putExtra("indexUser", indexUser)
+                    startActivity(intent)
                 }
             }
         }
 
         btToRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
-            intent.putParcelableArrayListExtra("listUser", listUser)
-            goToRegister.launch(intent)
+            startActivity(intent)
         }
     }
 
@@ -93,11 +66,11 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "Field tidak boleh kosong!", Toast.LENGTH_SHORT).show()
         } else {
             // CEK USER
-            for (user in listUser) {
+            for (user in User.listUser) {
                 if (user.username == etUsername.text.toString()) {
                     // CEK PASSWORD
                     if (user.password == etPassword.text.toString()) {
-                        return listUser.indexOf(user)
+                        return User.listUser.indexOf(user)
                     } else {
                         Toast.makeText(this, "Password salah!", Toast.LENGTH_SHORT).show()
                     }

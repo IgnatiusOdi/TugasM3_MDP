@@ -25,7 +25,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Alamat Pengirim"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:text="Jalan Bukit Harapan 3" />
 
     <EditText
         android:id="@+id/etAlamatPenerima"
@@ -33,7 +34,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Alamat Penerima"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:text="Jalan Bukit Suram 3" />
 
     <EditText
         android:id="@+id/etNamaPenerima"
@@ -41,7 +43,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Nama Penerima"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:text="David" />
 
     <EditText
         android:id="@+id/etNomorPenerima"
@@ -49,7 +52,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Nomor Telepon Penerima"
-        android:inputType="phone" />
+        android:inputType="phone"
+        android:text="081212341234" />
 
     <EditText
         android:id="@+id/etBerat"
@@ -57,7 +61,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Berat"
-        android:inputType="number" />
+        android:inputType="number"
+        android:text="2" />
 
     <EditText
         android:id="@+id/etKeterangan"
@@ -65,6 +70,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Keterangan"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:text="Minggu 3 suram" />
 
 </LinearLayout>

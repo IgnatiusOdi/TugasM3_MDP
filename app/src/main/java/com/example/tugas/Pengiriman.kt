@@ -13,11 +13,10 @@ class Pengiriman (
     val nomorPenerima: String,
     val berat: Double,
     val keterangan: String,
-    val kurir: String = "-",
-    val status: Int = 0,
+    var kurir: String = "-",
+    var status: Int = 0,
 ): Parcelable {
     companion object {
         var listPengiriman = ArrayList<Pengiriman>()
-
     }
 }

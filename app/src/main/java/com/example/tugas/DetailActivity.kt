@@ -1,5 +1,6 @@
 package com.example.tugas
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -18,6 +19,7 @@ class DetailActivity : AppCompatActivity() {
     lateinit var tvNomorHP: TextView
     lateinit var tvStatus: TextView
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
@@ -31,6 +33,26 @@ class DetailActivity : AppCompatActivity() {
         tvNomorHP = findViewById(R.id.tvNomorHPDetail)
         tvStatus = findViewById(R.id.tvStatusDetail)
 
+        val nomorResi: String = intent.getStringExtra("nomorResi")!!
+        lateinit var data: Pengiriman
+        for (item in Pengiriman.listPengiriman) {
+            if (nomorResi == item.nomorResi) {
+                data = item
+            }
+        }
+
+        tvKodeResi.text = "Kode Resi : ${data.nomorResi}"
+        tvPenerima.text = "Penerima : ${data.namaPenerima}"
+        tvKeterangan.text = data.keterangan
+        tvBerat.text = "Berat : ${data.berat}"
+        tvAlamatPengirim.text = data.alamatPengirim
+        tvAlamatTujuan.text = data.alamatPenerima
+        tvNomorHP.text = "Nomor HP : ${data.nomorPenerima}"
+        if (data.status == 1) {
+            tvStatus.text = "Status : Sedang dikirim"
+        } else {
+            tvStatus.text = "Status : Terkirim"
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -19,6 +19,7 @@ class PengirimanBaruActivity : AppCompatActivity() {
     lateinit var etBerat: EditText
     lateinit var etKeterangan: EditText
 
+    private var indexUser = 0
     private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +33,8 @@ class PengirimanBaruActivity : AppCompatActivity() {
         etBerat = findViewById(R.id.etBerat)
         etKeterangan = findViewById(R.id.etKeterangan)
 
-        user = intent.getParcelableExtra("user")!!
+        indexUser = intent.getIntExtra("indexUser", 0)
+        user = User.listUser[indexUser]
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -75,7 +77,7 @@ class PengirimanBaruActivity : AppCompatActivity() {
         val formatted = now.format(formatter)
 
         var jumlahResi = 1
-        var nomorResi = "${user.name[0].uppercaseChar()}" + "${etNamaPenerima.text.toString()[0].uppercaseChar()}" + "$formatted"
+        var nomorResi = "${user.name[0].uppercaseChar()}" + "${etNamaPenerima.text.toString()[0].uppercaseChar()}" + formatted
 
         for (kiriman in Pengiriman.listPengiriman) {
             if (kiriman.nomorResi.contains(nomorResi)) {

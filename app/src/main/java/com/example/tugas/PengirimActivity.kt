@@ -30,7 +30,7 @@ class PengirimActivity : AppCompatActivity() {
     lateinit var btCheck: Button
 
     private lateinit var goToPengirimanBaru: ActivityResultLauncher<Intent>
-    private lateinit var user: User
+    private var indexUser = 0
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,12 +50,13 @@ class PengirimActivity : AppCompatActivity() {
         tvStatus = findViewById(R.id.tvStatus)
         btCheck = findViewById(R.id.btCheck)
 
-        user = intent.getParcelableExtra("user")!!
+        indexUser = intent.getIntExtra("indexUser", 0)
+        val user = User.listUser[indexUser]
 
         tvName.text = "Hi, ${user.name} !"
-        tvTotal.text = "${user.pengiriman.size}"
-        tvDikirim.text = "0"
-        tvTerkirim.text = "0"
+        tvTotal.text = "${user.dikirim + user.terkirim}"
+        tvDikirim.text = "${user.dikirim}"
+        tvTerkirim.text = "${user.terkirim}"
         for (kirim in user.pengiriman) {
             for (listkirim in Pengiriman.listPengiriman) {
                 if (kirim == listkirim.nomorResi) {
@@ -125,7 +126,7 @@ class PengirimActivity : AppCompatActivity() {
         when(item.itemId) {
             R.id.tambah->{
                 val intent = Intent(this, PengirimanBaruActivity::class.java)
-                intent.putExtra("user", user)
+                intent.putExtra("indexUser", indexUser)
                 goToPengirimanBaru.launch(intent)
             }
             R.id.logout->{

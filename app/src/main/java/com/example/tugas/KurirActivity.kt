@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ContextMenu
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
@@ -27,6 +24,8 @@ class KurirActivity : AppCompatActivity() {
     lateinit var goToSearch: ActivityResultLauncher<Intent>
     lateinit var goToDetail: ActivityResultLauncher<Intent>
     var focusedContextView: View? = null
+
+    private var indexUser = 0
     private lateinit var user: User
 
     @SuppressLint("SetTextI18n")
@@ -42,12 +41,11 @@ class KurirActivity : AppCompatActivity() {
         tvProses = findViewById(R.id.tvProsesKurir)
         tvTerkirim = findViewById(R.id.tvTerkirimKurir)
 
-        user = intent.getParcelableExtra("user")!!
+        indexUser = intent.getIntExtra("indexUser", 0)
+        user = User.listUser[indexUser]
 
         tvNameKurir.text = "Hi, ${user.name} !"
-        tvTotal.text = "${user.pengiriman.size}"
-        tvProses.text = "0"
-        tvTerkirim.text = "0"
+
         for (kirim in user.pengiriman) {
             for (listkirim in Pengiriman.listPengiriman) {
                 if (kirim == listkirim.nomorResi) {
@@ -63,18 +61,21 @@ class KurirActivity : AppCompatActivity() {
             }
         }
 
+        refreshPage()
         registerForContextMenu(tvSlot1)
         registerForContextMenu(tvSlot2)
         registerForContextMenu(tvSlot3)
 
         goToSearch = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             res: ActivityResult ->
-            if (res.resultCode == RESULT_CANCELED) {
+            if (res.resultCode == RESULT_OK) {
                 val data = res.data
                 if (data != null) {
-                    val intent = Intent()
-                    intent.putExtra("user", user)
-                    setResult(RESULT_OK, intent)
+                    refreshPage()
+                }
+            } else if (res.resultCode == RESULT_CANCELED) {
+                val data = res.data
+                if (data != null) {
                     finish()
                 }
             }
@@ -85,10 +86,81 @@ class KurirActivity : AppCompatActivity() {
             if (res.resultCode == RESULT_CANCELED) {
                 val data = res.data
                 if (data != null) {
-                    val intent = Intent()
-                    intent.putExtra("user", user)
-                    setResult(RESULT_OK, intent)
                     finish()
+                }
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun refreshPage() {
+        tvTotal.text = "${user.counterProses + user.counterTerkirim}"
+        tvProses.text = "${user.counterProses}"
+        tvTerkirim.text = "${user.counterTerkirim}"
+        for (i in 0 until 3) {
+            lateinit var data: Pengiriman
+            var stringData: String
+            var gravity: Int
+            var indexData = -1
+            if (user.pengiriman.size > i) {
+                val nomorResi = user.pengiriman[i]
+                for (kirim in Pengiriman.listPengiriman) {
+                    if (nomorResi == kirim.nomorResi) {
+                        data = kirim
+                        indexData = Pengiriman.listPengiriman.indexOf(kirim)
+                        break
+                    }
+                }
+                stringData = "Kode : ${data.nomorResi}\n" +
+                        "Alamat Pengirim : ${data.alamatPengirim}\n" +
+                        "Alamat Penerima : ${data.alamatPenerima}\n" +
+                        "Pengirim : ${data.namaPengirim}, Penerima : ${data.namaPenerima}\n" +
+                        "Nomor Telepon : ${data.nomorPenerima}\n" +
+                        "Keterangan : -"
+                gravity = Gravity.START
+            } else {
+                stringData = "SLOT KOSONG"
+                gravity = Gravity.CENTER
+            }
+            when (i) {
+                0 -> {
+                    tvSlot1.text = stringData
+                    tvSlot1.gravity = gravity
+                    if (indexData != -1) {
+                        if (Pengiriman.listPengiriman[indexData].status == 1) {
+                            tvSlot1.setBackgroundColor(resources.getColor(R.color.yellow))
+                        } else if (Pengiriman.listPengiriman[indexData].status == 2) {
+                            tvSlot1.setBackgroundColor(resources.getColor(R.color.green))
+                        }
+                    } else {
+                        tvSlot1.setBackgroundColor(resources.getColor(R.color.gray))
+                    }
+                }
+                1 -> {
+                    tvSlot2.text = stringData
+                    tvSlot2.gravity = gravity
+                    if (indexData != -1) {
+                        if (Pengiriman.listPengiriman[indexData].status == 1) {
+                            tvSlot2.setBackgroundColor(resources.getColor(R.color.yellow))
+                        } else if (Pengiriman.listPengiriman[indexData].status == 2) {
+                            tvSlot2.setBackgroundColor(resources.getColor(R.color.green))
+                        }
+                    } else {
+                        tvSlot2.setBackgroundColor(resources.getColor(R.color.gray))
+                    }
+                }
+                else -> {
+                    tvSlot3.text = stringData
+                    tvSlot3.gravity = gravity
+                    if (indexData != -1) {
+                        if (Pengiriman.listPengiriman[indexData].status == 1) {
+                            tvSlot3.setBackgroundColor(resources.getColor(R.color.yellow))
+                        } else if (Pengiriman.listPengiriman[indexData].status == 2) {
+                            tvSlot3.setBackgroundColor(resources.getColor(R.color.green))
+                        }
+                    } else {
+                        tvSlot3.setBackgroundColor(resources.getColor(R.color.gray))
+                    }
                 }
             }
         }
@@ -107,9 +179,6 @@ class KurirActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.logout->{
-                val intent = Intent()
-                intent.putExtra("user", user)
-                setResult(RESULT_OK, intent)
                 finish()
             }
         }
@@ -125,8 +194,7 @@ class KurirActivity : AppCompatActivity() {
         focusedContextView = v
         menuInflater.inflate(R.menu.context_menu, menu)
 
-        var index = -1
-        index = when (focusedContextView) {
+        val index = when (focusedContextView) {
             tvSlot1 -> {
                 0
             }
@@ -167,35 +235,96 @@ class KurirActivity : AppCompatActivity() {
         return when(item.itemId) {
             R.id.search->{
                 val intent = Intent(this, SearchActivity::class.java)
-                intent.putExtra("user", user)
+                intent.putExtra("indexUser", indexUser)
                 goToSearch.launch(intent)
                 true
             }
-            R.id.detail->{
-                var paket: String
-                if (focusedContextView == tvSlot1) {
-                    Toast.makeText(this, "tvSlot1", Toast.LENGTH_SHORT).show()
+            R.id.status->{
+                // CHANGE STATUS
+                if (item.title == "Finish") {
+                    lateinit var nomorResi: String
+                    when (focusedContextView) {
+                        tvSlot1 -> {
+                            nomorResi = user.pengiriman[0]
+                        }
+                        tvSlot2 -> {
+                            nomorResi = user.pengiriman[1]
+                        }
+                        tvSlot3 -> {
+                            nomorResi = user.pengiriman[2]
+                        }
+                    }
+                    for (kiriman in Pengiriman.listPengiriman) {
+                        if (kiriman.nomorResi == nomorResi) {
+                            kiriman.status = 2
+                            updatePengirim(nomorResi)
+                            updateKurir()
+                            break
+                        }
+                    }
+                } else if (item.title == "Complete") {
+                    when (focusedContextView) {
+                        tvSlot1 -> {
+                            user.pengiriman.removeAt(0)
+                        }
+                        tvSlot2 -> {
+                            user.pengiriman.removeAt(1)
+                        }
+                        else -> {
+                            user.pengiriman.removeAt(2)
+                        }
+                    }
                 }
-//                paket = when (focusedContextView) {
-//                    tvSlot1 -> {
-//                        user.pengiriman[0]
-//                    }
-//                    tvSlot2 -> {
-//                        user.pengiriman[1]
-//                    }
-//                    else -> {
-//                        user.pengiriman[2]
-//                    }
-//                }
-//                Toast.makeText(this, paket, Toast.LENGTH_SHORT).show()
-//                val intent = Intent(this, DetailActivity::class.java)
-//                intent.putExtra("data", "")
-//                goToDetail.launch(intent)
+
+                //UPDATE DATA USER
+                User.listUser[indexUser] = user
+
+                refreshPage()
+                true
+            }
+            R.id.detail->{
+                val nomorResi = when (focusedContextView) {
+                    tvSlot1 -> {
+                        user.pengiriman[0]
+                    }
+                    tvSlot2 -> {
+                        user.pengiriman[1]
+                    }
+                    else -> {
+                        user.pengiriman[2]
+                    }
+                }
+                val intent = Intent(this, DetailActivity::class.java)
+                intent.putExtra("nomorResi", nomorResi)
+                goToDetail.launch(intent)
                 true
             }
             else -> {
                 super.onContextItemSelected(item)
             }
         }
+    }
+
+    private fun updatePengirim(nomorResi: String) {
+        lateinit var namaPengirim: String
+        // CARI NAMA PENGIRIM
+        for (kiriman in Pengiriman.listPengiriman) {
+            if (nomorResi == kiriman.nomorResi) {
+                namaPengirim = kiriman.namaPengirim
+                break
+            }
+        }
+        // EDIT TERKIRIM PENGIRIM
+        for (pengirim in User.listUser) {
+            if (pengirim.name == namaPengirim) {
+                User.listUser[User.listUser.indexOf(pengirim)].dikirim -= 1
+                User.listUser[User.listUser.indexOf(pengirim)].terkirim += 1
+            }
+        }
+    }
+
+    private fun updateKurir() {
+        user.counterProses -= 1
+        user.counterTerkirim += 1
     }
 }

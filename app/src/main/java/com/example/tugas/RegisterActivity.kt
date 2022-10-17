@@ -17,8 +17,6 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var btRegister: Button
     lateinit var btToLogin: Button
 
-    var listUser: ArrayList<User> = ArrayList()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -31,12 +29,10 @@ class RegisterActivity : AppCompatActivity() {
         btRegister = findViewById(R.id.btRegister)
         btToLogin = findViewById(R.id.btToLogin)
 
-        listUser = intent.getParcelableArrayListExtra("listUser")!!
-
         btRegister.setOnClickListener {
             if (registerCheck()) {
                 val user = User(etName.text.toString(), etUsername.text.toString(), etPassword.text.toString(), etNomorTelepon.text.toString())
-                listUser.add(user)
+                User.listUser.add(user)
                 Toast.makeText(this, "Berhasil register!", Toast.LENGTH_SHORT).show()
                 etName.setText("")
                 etUsername.setText("")
@@ -47,9 +43,6 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         btToLogin.setOnClickListener {
-            val resultIntent = Intent()
-            resultIntent.putParcelableArrayListExtra("listUser", listUser)
-            setResult(RESULT_OK, resultIntent)
             finish()
         }
     }
@@ -65,7 +58,7 @@ class RegisterActivity : AppCompatActivity() {
             return false
         } else {
             // USERNAME KEMBAR
-            for (user in listUser) {
+            for (user in User.listUser) {
                 if (user.username == etUsername.text.toString()) {
                     Toast.makeText(this, "Username tidak boleh kembar!", Toast.LENGTH_SHORT).show()
                     return false

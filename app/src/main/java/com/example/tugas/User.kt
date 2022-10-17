@@ -11,6 +11,13 @@ class User(
     val nomortelepon: String,
     var dikirim: Int = 0,
     var terkirim: Int = 0,
+
+    var counterProses: Int = 0,
+    var counterTerkirim: Int = 0,
     var pengiriman: ArrayList<String> = ArrayList(),
     var penolakan: ArrayList<String> = ArrayList(),
-):Parcelable {}
+):Parcelable {
+    companion object {
+        var listUser = ArrayList<User>()
+    }
+}
